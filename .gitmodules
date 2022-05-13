@@ -4,3 +4,6 @@
 [submodule "lib/solmate"]
 	path = lib/solmate
 	url = https://github.com/rari-capital/solmate
+[submodule "lib/world-id-example-airdrop"]
+	path = lib/world-id-example-airdrop
+	url = https://github.com/worldcoin/world-id-example-airdrop
