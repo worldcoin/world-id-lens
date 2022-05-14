@@ -1,34 +1,35 @@
-name: test
+on:
+    push:
+        branches:
+            - main
+    pull_request:
 
-on: workflow_dispatch
-
-env:
-  FOUNDRY_PROFILE: ci
+name: Unit Tests
 
 jobs:
-  check:
-    strategy:
-      fail-fast: true
+    tests:
+        runs-on: ubuntu-latest
 
-    name: Foundry project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  submodules: recursive
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
+            - name: Install Foundry
+              uses: onbjerg/foundry-toolchain@v1
+              with:
+                  version: nightly
 
-      - name: Run Forge build
-        run: |
-          forge --version
-          forge build --sizes
-        id: build
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '17'
+                  cache: 'npm'
 
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+            - name: Install Dependencies
+              run: make install
+
+            - name: Build contracts
+              run: make build
+
+            - name: Run tests
+              run: make test

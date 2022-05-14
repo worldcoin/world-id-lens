@@ -1,0 +1,8 @@
+solmate/=lib/solmate/src/
+forge-std/=lib/forge-std/src/
+ds-test/=lib/forge-std/lib/ds-test/src/
+zk-kit/=lib/world-id-example-airdrop/lib/zk-kit/
+worldcoin/world-id/=lib/world-id-example-airdrop/src/
+@zk-kit/=lib/world-id-example-airdrop/lib/zk-kit/packages/
+semaphore/=lib/world-id-example-airdrop/lib/semaphore/contracts/
+@openzeppelin/=lib/world-id-example-airdrop/lib/openzeppelin-contracts/
