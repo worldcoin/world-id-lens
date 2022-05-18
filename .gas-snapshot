@@ -1,4 +1,4 @@
-HumanCheckTest:testCanReVerifyProfile() (gas: 2355444)
+HumanCheckTest:testCanReVerifyProfile() (gas: 2355331)
 HumanCheckTest:testCanVerifyProfile() (gas: 2013659)
 HumanCheckTest:testCannotVerifyIfNotMember() (gas: 1966797)
 HumanCheckTest:testCannotVerifyWithInvalidProof() (gas: 8797746687696237289)

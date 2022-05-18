@@ -38,10 +38,11 @@ contract HumanCheck {
             proof
         );
 
-        ///@TODO: Check if saving `nullifierHashes[nullifierHash]` to memory saves gas
         if (nullifierHashes[nullifierHash] != 0) {
-            isVerified[nullifierHashes[nullifierHash]] = false;
-            emit ProfileUnverified(nullifierHashes[nullifierHash]);
+            uint256 prevProfileId = nullifierHashes[nullifierHash];
+
+            isVerified[prevProfileId] = false;
+            emit ProfileUnverified(prevProfileId);
         }
 
         isVerified[profileId] = true;
