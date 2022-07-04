@@ -1,8 +1,9 @@
-solmate/=lib/solmate/src/
+@openzeppelin/=lib/world-id-contracts/lib/openzeppelin-contracts/
+@zk-kit/=lib/world-id-contracts/lib/zk-kit/packages/
+ds-test/=lib/solmate/lib/ds-test/src/
 forge-std/=lib/forge-std/src/
-ds-test/=lib/forge-std/lib/ds-test/src/
-zk-kit/=lib/world-id-example-airdrop/lib/zk-kit/
-worldcoin/world-id/=lib/world-id-example-airdrop/src/
-@zk-kit/=lib/world-id-example-airdrop/lib/zk-kit/packages/
-semaphore/=lib/world-id-example-airdrop/lib/semaphore/contracts/
-@openzeppelin/=lib/world-id-example-airdrop/lib/openzeppelin-contracts/
+openzeppelin-contracts/=lib/world-id-contracts/lib/openzeppelin-contracts/
+semaphore/=lib/world-id-contracts/lib/semaphore/contracts/
+solmate/=lib/solmate/src/
+world-id-contracts/=lib/world-id-contracts/src/
+zk-kit/=lib/world-id-contracts/lib/zk-kit/

@@ -2,7 +2,7 @@ import { keccak256, pack } from '@ethersproject/solidity'
 import { ZkIdentity, Strategy } from '@zk-kit/identity'
 import { defaultAbiCoder as abi } from '@ethersproject/abi'
 import { Semaphore, generateMerkleProof } from '@zk-kit/protocols'
-import verificationKey from '../../../lib/world-id-example-airdrop/lib/semaphore/build/snark/verification_key.json' assert { type: 'json' }
+import verificationKey from '../../../lib/world-id-contracts/lib/semaphore/build/snark/verification_key.json' assert { type: 'json' }
 
 function hashBytes(signal) {
     return BigInt(keccak256(['bytes'], [signal])) >> BigInt(8)
@@ -39,8 +39,8 @@ async function main(verifierAddress, profileId) {
 
     const { proof, publicSignals } = await Semaphore.genProof(
         witness,
-        './lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore.wasm',
-        './lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore_final.zkey'
+        './lib/world-id-contracts/lib/semaphore/build/snark/semaphore.wasm',
+        './lib/world-id-contracts/lib/semaphore/build/snark/semaphore_final.zkey'
     )
 
     await Semaphore.verifyProof(verificationKey, { proof, publicSignals }).then(isValid => {

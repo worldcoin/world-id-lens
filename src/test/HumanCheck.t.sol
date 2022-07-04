@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import { HumanCheck } from '../HumanCheck.sol';
 import { Test } from 'forge-std/Test.sol';
 import { LensProfile } from './mock/LensProfile.sol';
-import { Semaphore } from 'worldcoin/world-id/Semaphore.sol';
+import { Semaphore } from 'world-id-contracts/Semaphore.sol';
 import { TypeConverter } from './utils/TypeConverter.sol';
 
 contract User {}
@@ -33,7 +33,7 @@ contract HumanCheckTest is Test {
         vm.label(address(verifier), 'HumanCheck');
         vm.label(address(semaphore), 'Semaphore');
 
-        semaphore.createGroup(1, 20, 0);
+        semaphore.createGroup(1, 20);
     }
 
     function testCanVerifyProfile() public {

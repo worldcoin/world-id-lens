@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import { ByteHasher } from 'worldcoin/world-id/libraries/ByteHasher.sol';
-import { ISemaphore } from 'worldcoin/world-id/interfaces/ISemaphore.sol';
+import { ByteHasher } from 'world-id-contracts/libraries/ByteHasher.sol';
+import { IWorldID } from 'world-id-contracts/interfaces/IWorldID.sol';
 
 contract HumanCheck {
     using ByteHasher for bytes;
@@ -13,13 +13,13 @@ contract HumanCheck {
     event ProfileUnverified(uint256 indexed profileId);
 
     uint256 internal immutable groupId;
-    ISemaphore internal immutable semaphore;
+    IWorldID internal immutable worldID;
 
     mapping(uint256 => bool) public isVerified;
     mapping(uint256 => uint256) internal nullifierHashes;
 
-    constructor(ISemaphore _semaphore, uint256 _groupId) payable {
-        semaphore = _semaphore;
+    constructor(IWorldID _worldID, uint256 _groupId) payable {
+        worldID = _worldID;
         groupId = _groupId;
     }
 
@@ -29,7 +29,7 @@ contract HumanCheck {
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) public payable {
-        semaphore.verifyProof(
+        worldID.verifyProof(
             root,
             groupId,
             abi.encodePacked(profileId).hashToField(),
