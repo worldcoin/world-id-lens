@@ -38,6 +38,8 @@ The official World ID <> Lens smart contract can be found at `0x000`. To deploy 
     make test
     ```
 
+### Using the contract
+
 To test the contract with your own deployment, we recommend you use World ID's [Staging network](https://id.worldcoin.org/test),
 
 1. Point your smart contract to the World ID's Staging network contract, which can be found at https://developer.worldcoin.org/api/v1/contracts.
