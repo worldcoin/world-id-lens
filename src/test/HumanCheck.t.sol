@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import { HumanCheck } from '../HumanCheck.sol';
 import { Test } from 'forge-std/Test.sol';
+import { HumanCheck } from '../HumanCheck.sol';
 import { LensProfile } from './mock/LensProfile.sol';
-import { Semaphore } from 'world-id-contracts/Semaphore.sol';
 import { TypeConverter } from './utils/TypeConverter.sol';
+import { Semaphore as WorldID } from 'world-id-contracts/Semaphore.sol';
 
 contract User {}
 
@@ -17,32 +17,32 @@ contract HumanCheckTest is Test {
     event ProfileUnverified(uint256 indexed profileId);
 
     User user;
-    Semaphore semaphore;
+    WorldID worldId;
     HumanCheck verifier;
     LensProfile profile;
 
     function setUp() public {
         user = new User();
         profile = new LensProfile();
-        semaphore = new Semaphore();
-        verifier = new HumanCheck(semaphore, 1);
+        worldId = new WorldID();
+        verifier = new HumanCheck(worldId, 1, 'test');
 
         vm.label(address(user), 'User');
         vm.label(address(this), 'Sender');
         vm.label(address(profile), 'Lens Profile NFT');
         vm.label(address(verifier), 'HumanCheck');
-        vm.label(address(semaphore), 'Semaphore');
+        vm.label(address(worldId), 'WorldID');
 
-        semaphore.createGroup(1, 20);
+        worldId.createGroup(1, 20);
     }
 
     function testCanVerifyProfile() public {
         uint256 profileId = profile.issue(address(this));
         assertTrue(!verifier.isVerified(profileId));
 
-        semaphore.addMember(1, _genIdentityCommitment());
+        worldId.addMember(1, _genIdentityCommitment());
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(profileId);
-        uint256 root = semaphore.getRoot(1);
+        uint256 root = worldId.getRoot(1);
 
         vm.expectEmit(true, false, false, true);
         emit ProfileVerified(profileId);
@@ -57,9 +57,9 @@ contract HumanCheckTest is Test {
         assertTrue(!verifier.isVerified(profileId));
         assertTrue(!verifier.isVerified(profileId2));
 
-        semaphore.addMember(1, _genIdentityCommitment());
+        worldId.addMember(1, _genIdentityCommitment());
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(profileId);
-        uint256 root = semaphore.getRoot(1);
+        uint256 root = worldId.getRoot(1);
 
         verifier.verify(profileId, root, nullifierHash, proof);
 
@@ -79,10 +79,10 @@ contract HumanCheckTest is Test {
         uint256 profileId = profile.issue(address(this));
         assertTrue(!verifier.isVerified(profileId));
 
-        semaphore.addMember(1, 1);
+        worldId.addMember(1, 1);
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(profileId);
 
-        uint256 root = semaphore.getRoot(1);
+        uint256 root = worldId.getRoot(1);
         vm.expectRevert(abi.encodeWithSignature('InvalidProof()'));
         verifier.verify(profileId, root, nullifierHash, proof);
 
@@ -93,10 +93,10 @@ contract HumanCheckTest is Test {
         uint256 profileId = profile.issue(address(this));
         assertTrue(!verifier.isVerified(profileId));
 
-        semaphore.addMember(1, _genIdentityCommitment());
+        worldId.addMember(1, _genIdentityCommitment());
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(profileId + 1);
 
-        uint256 root = semaphore.getRoot(1);
+        uint256 root = worldId.getRoot(1);
         vm.expectRevert(abi.encodeWithSignature('InvalidProof()'));
         verifier.verify(profileId, root, nullifierHash, proof);
 
@@ -107,12 +107,12 @@ contract HumanCheckTest is Test {
         uint256 profileId = profile.issue(address(this));
         assertTrue(!verifier.isVerified(profileId));
 
-        semaphore.addMember(1, _genIdentityCommitment());
+        worldId.addMember(1, _genIdentityCommitment());
 
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(profileId);
         proof[0] ^= 42;
 
-        uint256 root = semaphore.getRoot(1);
+        uint256 root = worldId.getRoot(1);
         vm.expectRevert(abi.encodeWithSignature('InvalidProof()'));
         verifier.verify(profileId, root, nullifierHash, proof);
 
@@ -133,7 +133,7 @@ contract HumanCheckTest is Test {
         ffiArgs[0] = 'node';
         ffiArgs[1] = '--no-warnings';
         ffiArgs[2] = 'src/test/scripts/generate-proof.js';
-        ffiArgs[3] = address(verifier).toString();
+        ffiArgs[3] = 'test';
         ffiArgs[4] = profileId.toString();
 
         bytes memory returnData = vm.ffi(ffiArgs);
