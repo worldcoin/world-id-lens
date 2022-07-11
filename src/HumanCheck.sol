@@ -34,6 +34,7 @@ contract HumanCheck {
             groupId,
             abi.encodePacked(profileId).hashToField(),
             nullifierHash,
+            // TODO: Use the proper signal from Developer Portal
             abi.encodePacked(address(this)).hashToField(),
             proof
         );
