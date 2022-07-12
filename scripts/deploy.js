@@ -1,6 +1,7 @@
 import fs from 'fs'
 import ora from 'ora'
 import dotenv from 'dotenv'
+import readline from 'readline'
 import { Wallet } from '@ethersproject/wallet'
 import { hexlify, concat } from '@ethersproject/bytes'
 import { JsonRpcProvider } from '@ethersproject/providers'
@@ -22,6 +23,20 @@ if (!validConfig) process.exit(1)
 
 const provider = new JsonRpcProvider(process.env.RPC_URL)
 const wallet = new Wallet(process.env.PRIVATE_KEY, provider)
+
+const ask = async question => {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    })
+
+    return new Promise(resolve => {
+        rl.question(question, input => {
+            resolve(input)
+            rl.close()
+        })
+    })
+}
 
 async function main() {
     const network = await provider.getNetwork()
@@ -46,7 +61,7 @@ async function main() {
         data: hexlify(
             concat([
                 HumanCheck.bytecode.object,
-                abi.encode(HumanCheck.abi[0].inputs, [worldIDAddress, 1]),
+                abi.encode(HumanCheck.abi[0].inputs, [worldIDAddress, 1, await ask('Action ID: ')]),
             ])
         ),
     })
