@@ -25,7 +25,7 @@ contract HumanCheckTest is Test {
         user = new User();
         profile = new LensProfile();
         worldId = new WorldID();
-        verifier = new HumanCheck(worldId, 1, 'test');
+        verifier = new HumanCheck(worldId, 1, 'wid_staging_12345678');
 
         vm.label(address(user), 'User');
         vm.label(address(this), 'Sender');
@@ -133,7 +133,7 @@ contract HumanCheckTest is Test {
         ffiArgs[0] = 'node';
         ffiArgs[1] = '--no-warnings';
         ffiArgs[2] = 'src/test/scripts/generate-proof.js';
-        ffiArgs[3] = 'test';
+        ffiArgs[3] = 'wid_staging_12345678';
         ffiArgs[4] = profileId.toString();
 
         bytes memory returnData = vm.ffi(ffiArgs);
