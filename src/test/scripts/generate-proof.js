@@ -4,8 +4,8 @@ import { defaultAbiCoder as abi } from '@ethersproject/abi'
 import { Semaphore, generateMerkleProof } from '@zk-kit/protocols'
 import verificationKey from '../../../lib/world-id-contracts/lib/semaphore/build/snark/verification_key.json' assert { type: 'json' }
 
-function hashBytes(signal) {
-    return BigInt(keccak256(['bytes'], [signal])) >> BigInt(8)
+function hashBytes(signal, type = 'bytes') {
+    return BigInt(keccak256([type], [signal])) >> BigInt(8)
 }
 
 function generateSemaphoreWitness(
@@ -25,7 +25,7 @@ function generateSemaphoreWitness(
     }
 }
 
-async function main(verifierAddress, profileId) {
+async function main(actionId, profileId) {
     const identity = new ZkIdentity(Strategy.MESSAGE, 'test-identity')
     const identityCommitment = identity.genIdentityCommitment()
 
@@ -33,7 +33,7 @@ async function main(verifierAddress, profileId) {
         identity.getTrapdoor(),
         identity.getNullifier(),
         generateMerkleProof(20, BigInt(0), [identityCommitment], identityCommitment),
-        hashBytes(verifierAddress),
+        hashBytes(actionId, 'string'),
         pack(['uint256'], [profileId])
     )
 
