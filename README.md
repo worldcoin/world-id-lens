@@ -13,9 +13,9 @@ This repository contains the **smart contract** that enables verification of [Le
 
 ## 🚀 Deployment
 
-The official World ID <> Lens smart contract can be found at `0x000`. To deploy your own version of this contract, follow these instructions.
-1. Update `HumanCheck.sol` with your own Action ID (you can obtain one from Worldcoin's [Developer Portal](https://developer.worldcoin.org)).
-2. Run `make deploy`.
+The official World ID <> Lens smart contract can be found at `0x8f9b3A2Eb1dfa6D90dEE7C6373f9C0088FeEebAB` on the Polygon Network. To deploy your own version of this contract, follow these instructions.
+1. Get an Action ID from Worldcoin's [Developer Portal](https://developer.worldcoin.org).
+2. Run `make`, then `make deploy`.
 
 <!-- WORLD-ID-SHARED-README-TAG:START - Do not remove or modify this section directly -->
 <!-- The contents of this file are inserted to all World ID repositories to provide general context on World ID. -->
