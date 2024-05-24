@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import { ByteHasher } from 'world-id-contracts/libraries/ByteHasher.sol';
-import { IWorldID } from 'world-id-contracts/interfaces/IWorldID.sol';
+import { ByteHasher } from './helpers/ByteHasher.sol';
+import { IWorldIDGroups } from 'world-id-contracts/interfaces/IWorldIDGroups.sol';
 
 contract HumanCheck {
     using ByteHasher for bytes;
@@ -16,13 +16,13 @@ contract HumanCheck {
     event ProfileUnverified(uint256 indexed profileId);
 
     /// @dev The World ID instance that will be used for verifying proofs
-    IWorldID internal immutable worldId;
+    IWorldIDGroups internal immutable worldId;
 
     /// @dev The World ID group ID (always `1`)
-    uint256 internal immutable groupId;
+    uint256 internal immutable groupId = 1;
 
-    /// @dev The World ID Action ID
-    uint256 internal immutable actionId;
+    /// @dev The World ID external nullifier hash
+    uint256 internal immutable externalNullifierHash;
 
     /// @notice Whether a profile is verified
     /// @dev This also generates an `isVerified(uint256) getter
@@ -32,16 +32,13 @@ contract HumanCheck {
     mapping(uint256 => uint256) internal nullifierHashes;
 
     /// @param _worldId The WorldID instance that will verify the proofs
-    /// @param _groupId The WorldID group that contains our users (always `1`)
-    /// @param _actionId The WorldID Action ID for the proofs
-    constructor(
-        IWorldID _worldId,
-        uint256 _groupId,
-        string memory _actionId
-    ) payable {
+    /// @param _appId The World ID App ID (from Developer Portal)
+    /// @param _action The World ID action
+    constructor(IWorldIDGroups _worldId, string memory _appId, string memory _action) payable {
         worldId = _worldId;
-        groupId = _groupId;
-        actionId = abi.encodePacked(_actionId).hashToField();
+        externalNullifierHash = abi
+            .encodePacked(abi.encodePacked(_appId).hashToField(), _action)
+            .hashToField();
     }
 
     /// @notice Verify a Lens profile
@@ -60,7 +57,7 @@ contract HumanCheck {
             groupId,
             abi.encodePacked(profileId).hashToField(),
             nullifierHash,
-            actionId,
+            externalNullifierHash,
             proof
         );
 

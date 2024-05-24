@@ -1,7 +1,2 @@
-[default]
-src = 'src'
-out = 'out'
+[profile.default]
 ffi = true
-libs = ['lib']
-
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config
